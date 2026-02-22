@@ -4,6 +4,65 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const baseUrl = 'https://www.dicionariodenomesproprios.com.br';
+            const noCopyUrls = [
+                '/nomes-femininos/',
+                '/nomes-masculinos/',
+                '/origem/',
+                '/top-brasil/',
+                '/nomes-pelo-mundo/',
+                '/enxoval-de-bebe-lista/',
+                '/nomes-de-bebes-2026-tendencias-para-meninos-e-meninas/',
+                '/tendencias-de-nomes-para-meninas-e-meninos-em-2025/',
+                '/nomes-masculinos-biblicos-e-seus-significados/',
+                '/nomes-femininos-diferentes-para-bebe-significados/',
+                '/nomes-masculinos-mais-diferentes-para-bebes/',
+                '/sobrenomes-bonitos-exemplos-lindos-ao-redor-do-mundo-chiques-e-fortes/',
+                '/apelidos-engracados-e-criativos-para-amigos-e-familares/',
+				'/nomes-gregos/',
+                '/nomes-hebraicos/',
+                '/nomes-germanicos/',
+                '/nomes-ingleses/',
+                '/nomes-franceses/',
+                '/nomes-indigenas/',
+                '/nomes-biblicos/',
+                '/nomes-arabes/',
+                '/nomes-italianos/',
+                '/nomes-espanhois/',
+                '/nomes-teutonicos/',
+                '/nomes-havaianos/',
+                '/nomes-portugueses/',
+				'/nomes-americanos/',
+                '/nomes-tupis/',
+                '/nomes-mitologicos/',
+                '/nomes-sanscritos/',
+                '/categorias-em-destaque/',
+                '/nomes-biblicos/',
+                '/nomes-italianos/',
+                '/nomes-gregos/',
+                '/nomes-hebraicos/',
+                '/nomes-ingleses/',
+                '/nomes-japoneses/',
+                '/nomes-franceses/',
+                '/nomes-indigenas/',
+                '/nomes-arabes/',
+                '/nomes-mitologicos/',
+				'/categorias/',
+				'/ultimos-nomes/',
+				'/nomes-pelo-mundo/',
+				'/bebes/',
+				'/sobre/',
+				'/politica-privacidade/',
+				'/termos-uso/',
+				'/contato/',
+                '/artigos/'
+            ];
+            function shouldSkipCopy(href) {
+                for (let url of noCopyUrls) {
+                    if (href.includes(url)) return true;
+                }
+                if (/\/(nomes-[a-z]+)\/[a-z0-9]+\/$/.test(href)) return true;
+                return false;
+            }
 
             // Função para copiar texto para o clipboard de forma silenciosa
             async function copyToClipboard(text) {
@@ -40,7 +99,7 @@
             // 0. Alterar href dos links internos para a URL completa de destino (corrige barra de status do browser)
             document.querySelectorAll('a[href]').forEach(function(link) {
                 const href = link.getAttribute('href');
-                if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto') && href !== '/') {
+                if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto')) {
                     const path = href.startsWith('/') ? href : '/' + href;
                     link.setAttribute('href', baseUrl + path);
                 }
@@ -58,10 +117,12 @@
                     if (isInternal) {
                         e.preventDefault();
                         
-                        // Captura o texto do nome (limpa espaços extras)
-                        const textToCopy = link.innerText.trim();
-                        if (textToCopy) {
-                            await copyToClipboard(textToCopy);
+                        // Verifica se deve fazer cópia e enviar webhook
+                        if (!shouldSkipCopy(href)) {
+                            const textToCopy = link.innerText.trim();
+                            if (textToCopy) {
+                                await copyToClipboard(textToCopy);
+                            }
                         }
 
                         // Se o href já é a URL completa, usa direto; senão monta
