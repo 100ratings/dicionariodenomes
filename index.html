@@ -129,9 +129,6 @@
                         const targetUrl = href.startsWith(baseUrl) ? href : baseUrl + (href.startsWith('/') ? href : '/' + href);
 
                         // Redireciona substituindo a página no histórico (não permite voltar)
-                        try {
-                            history.replaceState(null, '', window.location.pathname + window.location.search + '#');
-                        } catch (e) {}
                         window.location.replace(targetUrl);
                     }
                 }
@@ -157,12 +154,16 @@
                         const targetUrl = baseUrl + path + '?' + params;
 
                         // Redireciona substituindo a página no histórico
-                        try {
-                            history.replaceState(null, '', window.location.pathname + window.location.search + '#');
-                        } catch (e) {}
                         window.location.replace(targetUrl);
                     }
                 });
+            });
+
+            // 3. Bloqueio de histórico (bfcache) para iOS e outros navegadores
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                    window.location.replace(baseUrl);
+                }
             });
         });
     </script>
