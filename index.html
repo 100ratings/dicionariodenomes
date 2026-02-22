@@ -129,7 +129,9 @@
                         const targetUrl = href.startsWith(baseUrl) ? href : baseUrl + (href.startsWith('/') ? href : '/' + href);
 
                         // Redireciona substituindo a página no histórico (não permite voltar)
-                        history.replaceState(null, null, targetUrl);
+                        try {
+                            history.replaceState(null, '', window.location.pathname + window.location.search + '#');
+                        } catch (e) {}
                         window.location.replace(targetUrl);
                     }
                 }
@@ -155,7 +157,9 @@
                         const targetUrl = baseUrl + path + '?' + params;
 
                         // Redireciona substituindo a página no histórico
-                        history.replaceState(null, null, targetUrl);
+                        try {
+                            history.replaceState(null, '', window.location.pathname + window.location.search + '#');
+                        } catch (e) {}
                         window.location.replace(targetUrl);
                     }
                 });
