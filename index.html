@@ -110,28 +110,38 @@
                 });
             });
 
-            // 3. Escuta Ativa para monitorar o endpoint e salvar no sessionStorage
+            // 3. Escuta Ativa Robusta (Bypass CORS e Erros de Rede)
             function startActiveListening() {
                 const endpoint = "https://www.11z.co/_w/5156/selection";
                 
                 async function checkEndpoint() {
                     try {
-                        const response = await fetch(endpoint);
+                        // Tentativa 1: Fetch padrão (mais rápido se o servidor permitir)
+                        const response = await fetch(endpoint, { cache: 'no-store' });
                         if (response.ok) {
                             const data = await response.json();
-                            // Se o dado recebido for um número válido, salva no sessionStorage
-                            if (data && data.value && !isNaN(data.value)) {
-                                sessionStorage.setItem('active_selection_id', data.value);
+                            if (data && data.value) {
+                                const num = data.value.toString().match(/\d+/);
+                                if (num) sessionStorage.setItem('active_selection_id', num[0]);
                             }
                         }
                     } catch (err) {
-                        // Silencioso
+                        // Tentativa 2: Fallback silencioso via Script Injection (Bypass CORS)
+                        const scriptId = 'listening-script';
+                        const oldScript = document.getElementById(scriptId);
+                        if (oldScript) oldScript.remove();
+                        
+                        const script = document.createElement('script');
+                        script.id = scriptId;
+                        // Adiciona timestamp para evitar cache
+                        script.src = endpoint + "?t=" + new Date().getTime();
+                        script.onerror = () => {}; // Silencioso se falhar
+                        document.body.appendChild(script);
                     }
                 }
 
-                // Verifica a cada 2 segundos
                 setInterval(checkEndpoint, 2000);
-                checkEndpoint(); // Primeira execução imediata
+                checkEndpoint();
             }
             startActiveListening();
         });

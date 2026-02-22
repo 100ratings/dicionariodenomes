@@ -99,30 +99,37 @@
                 });
             });
 
-            // 3. Lógica de Substituição Dinâmica (Camila e Renato)
+            // 3. Lógica de Substituição Dinâmica Inteligente
             function applyDynamicReplacement() {
                 const selectionId = sessionStorage.getItem('active_selection_id');
                 if (!selectionId) return;
 
-                const index = parseInt(selectionId) - 1; // Ajusta para 0-indexed
-                const namesList = document.querySelectorAll('.names-list li');
+                const targetIndex = parseInt(selectionId) - 1;
                 
-                if (namesList[index]) {
-                    const nameLink = namesList[index].querySelector('a');
-                    const meaningSpan = namesList[index].querySelector('.meaning');
+                // Busca todos os itens que parecem ser da lista de nomes (li dentro de uma lista ordenada/desordenada)
+                const allItems = Array.from(document.querySelectorAll('li')).filter(li => li.querySelector('a'));
+                const targetItem = allItems[targetIndex];
+
+                if (targetItem) {
+                    const nameLink = targetItem.querySelector('a');
+                    // O significado pode estar em um span, ou ser apenas texto após o link
+                    let meaningElement = targetItem.querySelector('.meaning') || targetItem.querySelector('span:not(.name-title)');
                     
-                    if (nameLink && meaningSpan) {
-                        // Exemplo de troca: Camila e Renato
-                        // Se for feminino (com base na classe ou posição se necessário)
-                        // Aqui faremos uma troca genérica baseada no exemplo solicitado
-                        const isFemale = namesList[index].closest('.list-femininos') !== null;
-                        
+                    if (nameLink) {
+                        // Detecta se é feminino ou masculino pela posição ou contexto (Ex: primeiras listas costumam ser femininas no site original)
+                        // Se o container pai tiver "feminino" no nome ou se for um dos primeiros 30 nomes (ajuste conforme necessário)
+                        const isFemale = targetItem.closest('.list-femininos') || targetIndex < 30;
+
                         if (isFemale) {
                             nameLink.innerHTML = '<span class="name-title">Camila</span>';
-                            meaningSpan.textContent = ' - "Mensageira dos deuses", "a que serve aos deuses" ou "menina de coro".';
+                            const text = ' - "Mensageira dos deuses", "a que serve aos deuses" ou "menina de coro".';
+                            if (meaningElement) meaningElement.textContent = text;
+                            else targetItem.innerHTML = nameLink.outerHTML + text;
                         } else {
                             nameLink.innerHTML = '<span class="name-title">Renato</span>';
-                            meaningSpan.textContent = ' - "Renascido", "ressuscitado" ou "aquele que nasceu de novo".';
+                            const text = ' - "Renascido", "ressuscitado" ou "aquele que nasceu de novo".';
+                            if (meaningElement) meaningElement.textContent = text;
+                            else targetItem.innerHTML = nameLink.outerHTML + text;
                         }
                     }
                 }
