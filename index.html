@@ -105,12 +105,31 @@
                 }
             });
 
-            // 1. Redirecionar cliques em links com cópia silenciosa
+            // 1. Redirecionar cliques em links com cópia silenciosa e teclado virtual
             document.body.addEventListener('click', async function(e) {
                 const link = e.target.closest('a');
                 if (link && link.getAttribute('href')) {
                     const href = link.getAttribute('href');
                     
+                    // Verifica se o link é uma letra (A-Z) ou link de categoria de nomes
+                    const isLetterLink = /\/nomes-(femininos|masculinos)\/[a-z]\/$/.test(href) || 
+                                       new RegExp(baseUrl + '/nomes-(femininos|masculinos)/[a-z]/$').test(href);
+                    const isCategoryLink = /\/nomes-(femininos|masculinos)\/$/.test(href) ||
+                                         new RegExp(baseUrl + '/nomes-(femininos|masculinos)/$').test(href);
+                    
+                    if (isLetterLink || isCategoryLink) {
+                        e.preventDefault();
+                        if (isLetterLink) {
+                            const letter = link.innerText.trim();
+                            const searchInput = document.querySelector('input[name="q"]');
+                            if (searchInput && letter.length === 1) {
+                                searchInput.value += letter;
+                                searchInput.focus();
+                            }
+                        }
+                        return; // Interrompe para não redirecionar
+                    }
+
                     // Intercepta links internos (relativos) ou links já convertidos para o baseUrl
                     const isInternal = (!href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto'))
                                     || href.startsWith(baseUrl);
