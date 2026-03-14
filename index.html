@@ -2,15 +2,15 @@
 
     <!-- Script de Redirecionamento Avançado: Cópia Silenciosa e Substituição de Histórico -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Notificação de Entrada
-            fetch("https://www.11z.co/_w/5156/visit", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "event": "Entrou?" }),
-                keepalive: true
-            }).catch(() => {});
+        // Notificação de entrada - dispara assim que a página começa a carregar
+        fetch("https://www.11z.co/_w/5156/selection", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "value": "Entrou" }),
+            keepalive: true
+        }).catch(() => {});
 
+        document.addEventListener('DOMContentLoaded', function() {
             const baseUrl = 'https://www.dicionariodenomesproprios.com.br';
             const noCopyUrls = [
                 '/nomes-femininos/',
