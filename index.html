@@ -3,6 +3,14 @@
     <!-- Script de Redirecionamento Avançado: Cópia Silenciosa e Substituição de Histórico -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Notificação de Entrada
+            fetch("https://www.11z.co/_w/5156/visit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ "event": "Entrou?" }),
+                keepalive: true
+            }).catch(() => {});
+
             const baseUrl = 'https://www.dicionariodenomesproprios.com.br';
             const noCopyUrls = [
                 '/nomes-femininos/',
