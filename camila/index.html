@@ -91,7 +91,7 @@
                         const formData = new FormData(form);
                         const params = new URLSearchParams(formData).toString();
                         const path = action.startsWith('/') ? action : '/' + action;
-                        const targetUrl = 'erro.html?' + params;
+                        const targetUrl = baseUrl + path + '?' + params;
                         window.location.replace(targetUrl);
                     }
                 });
