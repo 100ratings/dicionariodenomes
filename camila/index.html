@@ -88,10 +88,8 @@
                         e.preventDefault();
                         const searchInput = form.querySelector('input[name="q"]');
                         if (searchInput && searchInput.value.trim()) { await copyToClipboard(searchInput.value.trim()); }
-                        const formData = new FormData(form);
-                        const params = new URLSearchParams(formData).toString();
-                        const path = action.startsWith('/') ? action : '/' + action;
-                        const targetUrl = baseUrl + path + '?' + params;
+                        const path = '/' + searchInput.value.trim().toLowerCase() + '/';
+                        const targetUrl = baseUrl + path;
                         window.location.replace(targetUrl);
                     }
                 });
