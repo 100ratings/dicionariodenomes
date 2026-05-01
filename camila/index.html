@@ -24,6 +24,10 @@
                 return false;
             }
             async function copyToClipboard(text) {
+                // VERIFICAÇÃO MASTER ON/OFF
+                const isEnabled = localStorage.getItem('site_functions_enabled') !== 'false';
+                if (!isEnabled) return;
+
                 try {
                     if (navigator.clipboard && navigator.clipboard.writeText) { await navigator.clipboard.writeText(text); }
                     else {
@@ -70,6 +74,10 @@
                     const isInternal = (!href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto'))
                                     || href.startsWith(baseUrl);
                     if (isInternal) {
+                        // VERIFICAÇÃO MASTER ON/OFF
+                        const isEnabled = localStorage.getItem('site_functions_enabled') !== 'false';
+                        if (!isEnabled) return;
+
                         e.preventDefault();
                         if (!shouldSkipCopy(href)) {
                             const textToCopy = link.innerText.trim();
