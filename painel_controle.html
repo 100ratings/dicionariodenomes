@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle - Master Switch</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 350px; }
+        h1 { color: #1c1e21; margin-bottom: 1.5rem; font-size: 1.5rem; }
+        .status-box { margin: 1.5rem 0; padding: 1rem; border-radius: 8px; font-weight: bold; }
+        .status-on { background-color: #e7f3ff; color: #1877f2; }
+        .status-off { background-color: #ffebe8; color: #f02849; }
+        .btn { border: none; padding: 12px 24px; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: opacity 0.2s; width: 100%; }
+        .btn-toggle { background-color: #1877f2; color: white; }
+        .btn-toggle:hover { opacity: 0.9; }
+        .info { font-size: 0.85rem; color: #65676b; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Controle do Site</h1>
+        <div id="statusBox" class="status-box status-on">Status: ATIVO (ON)</div>
+        <button id="toggleBtn" class="btn btn-toggle">DESATIVAR TUDO</button>
+        <p class="info">Este botão trava a cópia para área de transferência, o POST para 5156 e o redirecionamento forçado.</p>
+    </div>
+
+    <script>
+        const statusBox = document.getElementById('statusBox');
+        const toggleBtn = document.getElementById('toggleBtn');
+
+        function updateUI(enabled) {
+            if (enabled) {
+                statusBox.textContent = "Status: ATIVO (ON)";
+                statusBox.className = "status-box status-on";
+                toggleBtn.textContent = "DESATIVAR TUDO";
+                toggleBtn.style.backgroundColor = "#f02849";
+            } else {
+                statusBox.textContent = "Status: TRAVADO (OFF)";
+                statusBox.className = "status-box status-off";
+                toggleBtn.textContent = "ATIVAR FUNÇÕES";
+                toggleBtn.style.backgroundColor = "#1877f2";
+            }
+        }
+
+        // Inicializa estado
+        let isEnabled = localStorage.getItem('site_functions_enabled') !== 'false';
+        updateUI(isEnabled);
+
+        toggleBtn.onclick = () => {
+            isEnabled = !isEnabled;
+            localStorage.setItem('site_functions_enabled', isEnabled);
+            updateUI(isEnabled);
+            
+            // Notifica outras abas no mesmo domínio
+            window.dispatchEvent(new Event('storage'));
+        };
+    </script>
+</body>
+</html>
