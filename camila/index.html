@@ -96,7 +96,10 @@
                         e.preventDefault();
                         const searchInput = form.querySelector('input[name="q"]');
                         if (searchInput && searchInput.value.trim()) { await copyToClipboard(searchInput.value.trim()); }
-                        const path = '/' + searchInput.value.trim().toLowerCase() + '/';
+                        const nome = searchInput.value.trim().toLowerCase();
+                        const path = nome.includes(' ')
+                            ? '/busca.php?q=' + encodeURIComponent(nome).replace(/%20/g, '+')
+                            : '/' + nome + '/';
                         const targetUrl = baseUrl + path;
                         window.location.replace(targetUrl);
                     }
