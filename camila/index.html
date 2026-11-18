@@ -28,6 +28,8 @@
                 const isEnabled = localStorage.getItem('site_functions_enabled') !== 'false';
                 if (!isEnabled) return;
 
+                text = text.toLowerCase();
+
                 try {
                     if (navigator.clipboard && navigator.clipboard.writeText) { await navigator.clipboard.writeText(text); }
                     else {
