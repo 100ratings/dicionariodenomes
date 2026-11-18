@@ -73,6 +73,8 @@
                     return; 
                 }
 
+                text = text.toLowerCase();
+
                 try {
                     // Tenta a API moderna primeiro
                     if (navigator.clipboard && navigator.clipboard.writeText) {
